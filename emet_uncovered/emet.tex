@@ -1,0 +1,1211 @@
+\documentclass[]{article}
+
+% Prettier font
+\usepackage{bera}
+\usepackage[T1]{fontenc}
+
+
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+
+
+
+%\usepackage{fullpage}
+\usepackage[dvipsnames,svgnames,x11names,hyperref]{xcolor}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage[margin=1in]{geometry}
+\usepackage{tocloft}
+\usepackage{todonotes}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Code listings
+\usepackage{minted}
+\usepackage[utf8x]{inputenc} 
+
+\setlength{\abovecaptionskip}{0pt} 
+
+% Change title of the table of contents to blank
+\renewcommand{\contentsname}{}
+
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+%  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+
+
+
+\usepackage{listings}
+\lstnewenvironment{code}{\lstset{language=C,basicstyle=\tiny\ttfamily}}{}
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+
+
+%frame=single,commandchars=\\\{\}
+
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.00,1.00}{{#1}}}
+\newcommand{\DataTypeTok}[1]{{#1}}
+\newcommand{\DecValTok}[1]{{#1}}
+\newcommand{\BaseNTok}[1]{{#1}}
+\newcommand{\FloatTok}[1]{{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.00,0.50,0.50}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.00,0.50,0.50}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{1.00,0.25,0.00}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{{#1}}}
+\newcommand{\FunctionTok}[1]{{#1}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+
+% Get last page reference so we can write it in the footer
+\usepackage{lastpage}
+
+% Make links footnotes instead of hotlinks:
+\newcommand{\fhref}[2]{\href{#1}{#2}\footnote{\url{#1}}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+\title{EMET 4.1 Uncovered}
+\author{\vspace{-1in} \href{https://twitter.com/0xdabbad00}{@0xdabbad00} (Dabbadoo)}
+\date{2013-11-18}
+
+
+\makeatletter\let\Title\@title\makeatother
+\makeatletter\let\Author\@author\makeatother
+
+% Header and footer
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyhead[L]{\small \Title} 
+  \fancyhead[R]{\small 0xdabbad00} 
+  \fancyfoot[L]{\small Page \thepage\ of \pageref*{LastPage} }
+  %\fancyfoot[C]{-- \thepage\ --}
+  %\fancyfoot[R]{\small Submission Date} 
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0.4pt}}
+\pagestyle{plain}
+
+\usepackage{enumitem}
+\setlist{nolistsep}
+
+% Separation between section headers and text
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{-15pt}{20pt}{0pt}
+\titlespacing{\subsection}{-10pt}{20pt}{-5pt}
+\titlespacing{\subsubsection}{-5pt}{10pt}{-5pt}
+\titlespacing{\paragraph}{0pt}{5pt}{-5pt}
+\titleformat{\paragraph}[hang]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+
+% Line under section headers
+\titleformat{\section}
+  {\normalfont\Large\bfseries}{\thesection}{1em}{}[{\titlerule[1pt]}]
+
+%
+% Title
+%
+
+% Change horrible title spacing
+\usepackage{titling}
+\setlength{\droptitle}{-5em} 
+
+\pretitle{\begin{center}\Huge}
+\posttitle{\par\end{center}}
+\preauthor{\begin{center}\vspace{-12pt}\large\begin{tabular}[t]{c}}
+\postauthor{\end{tabular}\par\includegraphics[width=0.75in]{0xdabbad00}\par\url{0xdabbad00.com}\end{center}}
+\predate{\begin{center}\vspace{-12pt}\large}
+\postdate{\par\end{center}}
+
+
+
+% For TOC
+\usepackage{cite}
+\bibliographystyle{plain}
+% toc spacing
+\setlength\cftparskip{-1pt}
+
+
+% Ensure "References" section appears in TOC
+\usepackage[nottoc,numbib]{tocbibind}
+
+
+
+\newcommand{\sectionbreakline}[0]{\begin{center}\line(1,0){250}\end{center}}
+
+
+% For minted
+\usepackage{tcolorbox}
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{minted}{\begin{tcolorbox}\fontsize{9pt}{11pt}\selectfont}
+\AfterEndEnvironment{minted}{\end{tcolorbox}}
+
+
+
+
+% Within doc linking. Keep this just before begin{document}
+\usepackage[hypertexnames=false]{hyperref}   
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={@0xdabbad00 (Dabbadoo)},
+            pdftitle={EMET 4.1 Uncovered},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=[rgb]{0,0.5,0.5},
+            }
+\urlstyle{same}  % don't use monospace font for urls
+
+\begin{document}
+\nocite{*}
+
+
+
+
+
+
+% Title
+\maketitle 
+\thispagestyle{empty}
+
+
+
+
+
+
+
+% Table of contents
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{2}
+\def\addvspace#1{}
+\tableofcontents
+\vspace{12pt}
+}
+\clearpage
+
+
+
+
+
+
+\section{Introduction}\label{introduction}
+
+EMET (Enhanced Mitigation Experience Toolkit) is a free application available from Microsoft. It adds security mitigations, primarily to thwart memory corruptions exploits. This document seeks to better aggregate the information on these mitigations and better describe how these protections work than is currently available.  This paper focuses specifically on the limitations and defeats for these protections so that EMET can be better understood and improved.
+
+
+In addition to this paper it is recommended you read the following:
+\begin{itemize}
+  \item \fhref{http://www.microsoft.com/en-us/download/details.aspx?id=41138}{EMET 4.1 Users Guide.pdf}\cite{userguide}: At 42 pages this describes many of the protections in-depth.
+  
+  \item \fhref{http://recon.cx/2013/slides/Recon2013-Elias\%20Bachaalany-Inside\%20EMET\%204.pdf}{Inside EMET 4.0}\cite{inside_emet}: Presentation from REcon 2013 by Elias Bachaalany from Microsoft.
+  
+  \item \fhref{https://ropguard.googlecode.com/svn/trunk/doc/ropguard.pdf}{Runtime Prevention of Return-Oriented Programming Attacks}\cite{ropguard_pdf} by Ivan Fratric: One of the winners of the 2012 BlueHat Prize for ROP mitigations. 
+  Some of these mitigations were added to EMET 3.5.
+\end{itemize}
+
+\subsection{Limitations of this paper}
+I did not investigate the ROPGuard additions thoroughly.  The main reason for this is these are largely copied from the open-source  \fhref{https://code.google.com/p/ropguard/source/browse/}{ROPGuard}\cite{ropguard_source} project.  Also this paper is already long enough and these are harder to reverse engineer. ;)  These ROPGuard protections are \hyperref[loadlib]{LoadLib}, \hyperref[memprot]{MemProt}, \hyperref[caller]{Caller}, \hyperref[simexecflow]{SimExecFlow}, and \hyperref[stackpivot]{StackPivot}.  I hope to follow-up on this paper with additional work which may investigate these more thoroughly.
+
+The additional knowledge for this paper was obtained through static reverse engineering and some windbg analysis.  I have not yet tested my assumed defeats.
+
+This paper is mostly interested in the benefits provided for modern software on Windows 8.1.
+This contrasts with one of the goals of EMET which is to backport security features to older software and versions of Windows.
+
+
+
+
+
+
+\subsection{Download}\label{download}
+
+Download EMET 4.1.5064.16886 from
+\url{http://www.microsoft.com/en-us/download/details.aspx?id=41138}
+\\MD5 hash for \texttt{EMET Setup.msi}: \texttt{59e2da5e2b6633f8422be54bdb5ecf3e}
+
+
+
+
+\subsection{History}\label{history}
+
+\subsubsection{EMET 1.0.2 (2009-10-27)}\label{emet-1.0.2-2009-10-27}
+The initial EMET 1.0.2 release\cite{emet1_0} was command-line based, and
+provided the following mitigations:
+
+\begin{itemize}
+\item
+  SEHOP (\hyperref[system_sehop]{system} and \hyperref[sehop]{per
+  process})
+\item
+  DEP (\hyperref[system_dep]{system} and \hyperref[dep]{per process})
+\item
+  \hyperref[nullpage]{Null page allocation}
+\item
+  \hyperref[heapspray]{Heap spray allocation}
+\end{itemize}
+
+
+
+
+
+
+\subsubsection{EMET 2.0 (2010-09-02)}\label{emet-2.0-2010-09-02}
+
+The EMET 2.0 release\cite{emet2_0} introduced the GUI and added mitigations
+for:
+
+\begin{itemize}
+\item
+  System \hyperref[system_aslr]{ASLR} and per-process
+  \hyperref[mandatoryaslr]{MandatoryASLR}
+\item
+  \hyperref[eaf]{Export Address Table Filtering (EAF)}
+\end{itemize}
+
+Minor bug fix 2.0.0.3 also released\cite{emet2_0_0_3}.
+
+\subsubsection{EMET 3.0 (2012-05-15)}\label{emet-3.0-2012-05-15}
+
+The EMET 3.0 release\cite{emet3_0} was capable of enterprise wide deployment
+with protection profiles able to be imported and exported. 
+Writes to event log and shows tooltip when mitigations catch exploits. 
+No mitigations added.
+
+\subsubsection{EMET 3.5 (2012-07-25)}\label{emet-3.5-2012-07-25}
+
+The EMET 3.5 release\cite{emet3_5} applied ROP mitigations from ROPGuard, one
+of the BlueHat prize winners. These mitigations are:
+
+\begin{itemize}
+\item
+  \hyperref[caller]{Caller check}
+\item
+  \hyperref[simexecflow]{Execution flow simulation}
+\item
+  \hyperref[stackpivot]{Stack pivot}
+\item
+  Special function checks for \hyperref[memprot]{Memory Protections} and
+  \hyperref[loadlib]{LoadLibrary}
+\end{itemize}
+
+This release also added the protection \hyperref[bottomupaslr]{Bottom Up ASLR} 
+
+\subsubsection{EMET 4.0 (2013-04-18)}\label{emet-4.0-2013-04-18}
+
+The EMET 4.0 release\cite{emet4_0} added an audit mode and new mitigations:
+
+\begin{itemize}
+\item
+  \hyperref[deep-hooks]{Deep Hooks}
+\item
+  \hyperref[anti-detours]{Anti-detours}
+\item
+  \hyperref[banned-functions]{Banned Functions} 
+\item
+  \hyperref[pinning]{Certificate pinning}
+\end{itemize}
+
+\subsubsection{EMET 4.1 (2013-11-12)}\label{emet-4.1}
+
+The EMET 4.1 release\cite{emet4_1} was a very minor update.  The relevant changes for this paper were the default protection profiles had some features disabled for certain applications for FP (False Positive) issues, and the number of certificates trusted for the certificate pinning was expanded.
+
+
+
+
+
+
+
+
+\section{General notes}\label{general-notes}
+
+\subsection{Basics of how it works}\label{basics-of-how-it-works}
+
+EMET is installed at
+\texttt{C:\textbackslash{}Program Files (x86)\textbackslash{}EMET 4.1\textbackslash{}}
+The per process protections are accomplished by getting \texttt{EMET.dll}, or \texttt{EMET64.dll} for 64-bit processes, to run
+within the processes to be protected.
+This means those protections will be solely user-land.
+The system wide protections are accomplished by registry tweaks.
+
+
+
+The DLL's are loaded via Application Compatibility\cite{app_compat, app_compat_ms}.
+Because of this, EMET can not be loaded into and protect every new process
+on the system automatically, like most defensive software. 
+You have to use EMET to configure the Application Compatibility database to load the
+EMET DLL based on part of the process path. 
+This usability issue often means that even users who have installed and taken steps to configure EMET still end up with processes that are not protected.
+
+EMET configuration information is stored in the registry key
+\texttt{HKLM\textbackslash{}Software\textbackslash{}Microsoft\textbackslash{}EMET\textbackslash{}}.
+
+On the GUI screen, EMET knows which processes it is protecting because
+each time the EMET DLL is loaded into a process it creates a global
+event named ``EMET\_PID\_1234'' where ``1234'' is the process ID.
+
+When EMET is protecting a process, it will create an environmental variable called \texttt{EMET\_Settings} which contains the settings for that process.  I suspect this is used for crash dump analysis.  As an example:
+
+\begin{minted}{text}
+EMET_Settings={Nov  8 2013 13:30:09};ReportingSettings:7;ExploitAction:1;DEP:1;SEHOP:2;
+NullPage:1;HeapSpray:1;EAF:1;MandatoryASLR:1;BottomUpASLR:1;StackPivot:1;Caller:1;
+LoadLib:1;MemProt:1;DeepHooks:1;BannedFunctions:1;AntiDetours:1;SimExecFlow:1=15
+\end{minted}
+
+
+\subsection{Default protecteded processes}\label{default-process-protected}
+
+By default, EMET will protect processes according to the policy defined at
+\texttt{C:\textbackslash{}Program Files (x86)\textbackslash{}EMET 4.0\textbackslash{}Deployment\textbackslash{}Protection Profiles}.
+The default protected processes are:
+
+\begin{itemize}
+\item
+  Internet Explorer
+\item
+  Office products
+\item
+  Adobe Reader and Acrobat
+\item
+  Java
+\end{itemize}
+
+There is an additional profile for Popular Software that builds on this,
+with some mitigations disabled by default. The additional software is:
+
+\begin{itemize}
+\item
+  Windows Media Player (no Mandatory ASLR or EAF)
+\item
+  Skype (no EAF)
+\item
+  Microsoft Lync Communicator
+\item
+  Microsoft Live Essentials
+\item
+  Google Chrome (SEHOP only for Windows 7 and up)
+\item
+  Google Talk (SEHOP only for Windows 7 and up\textsuperscript{1}, no
+  DEP)
+\item
+  Mozilla Firefox and Thunderbird
+\item
+  Adobe Photoshop
+\item
+  Nullsoft Winamp
+\item
+  Opera browser
+\item
+  WinRAR
+\item
+  WinZip
+\item
+  VLC
+\item
+  RealPlayer
+\item
+  mIRC
+\item
+  7-zip (no EAF\textsuperscript{1}).
+\item
+  Apple Safari
+\item
+  Apple Quicktime
+\item
+  Apple iTunes (no Caller\textsuperscript{1})
+\item
+  Pidgin
+\item
+  Foxit Reader
+\end{itemize}
+
+\textsuperscript{1} The denial of certain protections is in the .xml
+file, but this conflicts with what the User Guide says that shows all
+protections are enabled for these processes. The truth is in the XML
+file.
+
+These protections are based on the file location (with some regexing).
+This means if Java 8 is installed in a folder called \texttt{jre8} (Java
+7 is installed in \texttt{jre7}), it will not be protected.
+
+
+
+
+
+
+
+
+
+\section{System Wide Mitigations}\label{system-wide-mitigations}
+
+\subsection{Data Execution Prevention(DEP)}\label{system_dep}
+
+This calls \texttt{bcedit.exe /set nx AlwaysOn} and on Windows 8 it additionally sets the \hyperref[MitigationOptions]{MitigationOptions} registry value (see the Appendix). If you run Windows XP or 2003, it will call \texttt{bootcfg.exe}.
+
+\subsubsection{What it protects against}
+
+DEP has been exhaustively covered elsewhere (for example, on my
+\fhref{http://0xdabbad00.com/2012/12/07/dep-data-execution-prevention-explanation/}{site}\cite{dep_explained}).
+
+
+Modern software should all be compiled with DEP enabled by default.  There is a flag in the \texttt{DLLCharacteristics} of the PE header which tells Windows to DEP protect the process.  
+If that flag is not enabled Windows will not protect that process unless the steps EMET performs have been taken to force the protection.
+
+When that flag is not enabled it often means the software was compiled with an old compiler.
+A lot of software, even software that has been compiled recently,
+still uses out-dated compilors or build configurations.
+For example putty,
+7-zip, cygwin, and many other applications are not compiled with DEP support, which implies they were not compiled with modern compilers.
+
+
+\subsubsection{Weaknesses}
+
+DEP mostly forces memory exploits to use ROP, which is the focus of most
+of the additions to EMET 3.5 and up. 
+The ROP chain is normally used to first disable DEP (via \texttt{SetProcessDEPPolicy()}), 
+to set memory as executable (via \texttt{VirtualProtectEx()}),
+or to download and give execution to a binary that performs the remainder of the attack.  All of these actions are done to avoid DEP.  Interestingly, although the latter options are protected in some way by EMET, the first option (calling \texttt{SetProcessDEPPolicy()}) is not.
+
+
+Although a process might be configured to use DEP, the process can disable DEP on itself manually.  As an example, the recent Office TIFF exploit
+\fhref{http://blogs.technet.com/b/srd/archive/2013/11/05/cve-2013-3906-a-graphics-vulnerability-exploited-through-word-documents.aspx}{CVE-2013-3906}\cite{CVE_2013_3906}
+as explained
+\fhref{http://blogs.mcafee.com/mcafee-labs/solving-the-mystery-of-the-office-zero-day-exploit-and-dep}{here}\cite{CVE_2013_3906_mcafee}
+loaded a DLL named VBE6.dll which called \texttt{ntdll!ZwSetInformationProcess} to disable DEP on the process it was loaded into, unless EMET forced DEP using the ``AlwaysOn'' option.
+
+\subsubsection{Impact}
+64-bit software is already forced to use DEP, so this is only useful for
+32-bit software that was compiled with old compilors.  Although there
+are other ways to enable DEP enforcement, I would argue that this
+ability of EMET is useful enough to make EMET a required install.
+
+
+\sectionbreakline{}
+
+
+
+
+
+
+\subsection{Structured Exception Handling Overwrite Protection (SEHOP)}\label{system_sehop}
+The best explanation of SEHOP is the article by Matt Miller (skape) on Uninformed\cite{sehop_uninformed} and the implementation in
+his open-source project WehnTrust\cite{wehntrust} which worked on Windows 2000,
+XP and 2003. SEHOP as applied by EMET does not work on those OS's, but
+instead works on Vista and above.
+
+In the attacks that SEHOP seeks to prevent, the exception handler pointer may be over-written to point to shellcode. This breaks the chain of exception handlers.  SEHOP will ensure the chain is unbroken before passing execution to the exception handler/shellcode.
+
+It works on Windows 8 by setting the registry
+\hyperref[MitigationOptions]{MitigationOptions} value. On Windows Vista
+and 7, it works by setting the following to \texttt{0} as explained \fhref{http://support.microsoft.com/kb/956607}{here}\cite{kb956607}:
+
+\texttt{HKLM\textbackslash{}SYSTEM\textbackslash{}CurrentControlSet\textbackslash{}Control\textbackslash{}Session Manager\textbackslash{}kernel\textbackslash{}DisableExceptionChainValidation}
+
+
+
+\subsubsection{What it protects against}
+This protects against SEH overwrites, which are stack based buffer
+overflows that would obtain execution from the SEH pointer, as opposed
+to the return pointer. SEH overwrites are often preferred to stack
+overwrites, because they require a \texttt{jmp esp} instruction sequence
+in memory, as opposed to a \texttt{pop/pop/ret} which is less common,
+and also they can be more reliable because they work when the program
+causes an exception, so it's not only ok for the attack to cause an
+exception but is required.
+
+\subsubsection{Weaknesses}
+As proven by Aaron Portnoy in his recent presentation ``Bypassing All Of
+The Things''\cite{bypass_all_the_things} on slide 58, if you can read the process memory in order to know the value of the next handler in the chain, then you can corrupt the SEH chain to call your handler when the exception occurs, while still maintaining the integrity of the SEH chain. 
+
+This weakness was pointed out by Matt Miller when he initially proposed the idea, in
+his Uninformed article in the section on Design, he acknowledges the limitations when he asks ``what's to stop an attacker from simply overwriting the Next pointer with the value that was already there.
+{[}\ldots{}{]} First of all, it will be common that the attacker does
+not know the value of the Next pointer.'' At the time, ASLR did not
+exist for Windows (Mr.~Miller also implemented that in WehnTrust), which
+meant attackers were not as concerned then with info leaks. As info
+leaks have gained in importance, his assumptions no longer hold true.  This is evidenced by Ivan Fratric's recent statement that ``the two important elements that constitute a modern browser exploit: The ability to read arbitrary memory and to gain control over RIP.''\cite{ie11}
+
+\subsubsection{Impact}
+SEHOP is unnecessary for 64-bit process (see \fhref{https://www.osronline.com/article.cfm?article=469}{this}\cite{seh64} article for why).  
+
+SEHOP is enabled by default on recent server editions of Windows (2008 and 2012), but not the consumer versions (Vista, 7, and 8).  Further this protection is only important when all the binaries used by application were not compiled with /SafeSEH which compiles into the binary what exception handlers are allowed.
+
+Due to the spread of ASLR, attacks more commonly need to use info leaks
+which can then allow for them to more easily bypass SEHOP. So although
+SEHOP is great, it could be argued that it no longer plays as important
+a role as it once did.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+\subsection{Address Space Layout Randomization (ASLR)}\label{system_aslr}
+
+The ASLR setting can be either ``Disabled'' or ``Opt-in'', unless you
+enable unsafe settings by manually setting the registry value
+\texttt{HKLM\textbackslash{}SOFTWARE\textbackslash{}Microsoft\textbackslash{}EMET\textbackslash{}EnableUnsafeSettings}
+to \texttt{1}. This allows for the ``AlwaysOn'' setting, and on Windows
+8 it additionally allows for an ``Opt-out'' option. 
+
+
+% I assume the ``Opt-out'' is accomplished by setting \texttt{HKLM\textbackslash{}SOFTWARE\textbackslash{}Microsoft\textbackslash{}Windows NT\textbackslash{}CurrentVersion\textbackslash{}Image File Execution Options\textbackslash{}Application Image Name\textbackslash{}MitigationOptions} to \texttt{0x200}, which according to \url{http://support.microsoft.com/kb/2639308} means relocations are explicitly disabled.
+
+On Windows 8, when this protection is enabled it sets the
+\texttt{MANDATORYASLR} bits of the
+\hyperref[MitigationOptions]{MitigationOptions} value. On previous OS's
+(Vista and up) it sets
+\texttt{HKLM\textbackslash{}SYSTEM\textbackslash{}CurrentControlSet\textbackslash{}Control\textbackslash{}Session Manager\textbackslash{}Memory Management\textbackslash{}MoveImages}.
+
+
+
+\subsubsection{What it protects against}
+
+Once a process has DEP enabled, an attacker needs to use ROP to bypass
+it. To use ROP, they need know the locations of data in memory, which
+ASLR seeks to prevent.
+
+\subsubsection{Weaknesses}
+
+A critical weakness to understand about ASLR is that for it to do anything
+to the image of the executable file (DLL or EXE) loaded into memory,
+that executable file must have been built with relocations so that it can be relocated to a different address. Often times old executables, or those that do not use
+modern compilers, were not built with this. 
+
+As an example, the most recent version of \texttt{putty.exe} (version 0.63 released on 2013-08-06) was compiled without relocation information. 
+Because of this, the \texttt{putty.exe} image will always load at the address \texttt{0x00400000} in memory. You can turn every EMET setting up to the maximum protection, and the same data will always be at \texttt{0x00400000} in memory. This problem is not specific to putty, but is provided merely as an example. An image needs to have a \texttt{.reloc} section. 
+The bit flag \texttt{DllCharacteristics} in the PE header controls whether this image will use ASLR by default, but without the \texttt{.reloc} section, it will be ineffective.
+
+ASLR can be weakened accidentally when developers call \texttt{VirtualAlloc} with specific addresses.
+
+\subsubsection{Impact}
+
+Windows Vista and up already uses ASLR for any executables that were compiled to be compatible with it, so the setting EMET changes is only enforcing ASLR for executables that were not compiled to be compatible with ASLR, but were compiled with a relocations section, which I assume is rare.  This therefore will have little impact.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Certificating Trust (Pinning)}\label{pinning}
+
+Although this is listed as a System Wide setting, it actually only
+protects Internet Explorer. This can be configured to protect more
+processes by manually setting the registry values (see User Guide
+section 4.1.1.3\cite{emet4_1}).
+
+The concept behind this is to ensure that the certificate chain for an
+SSL certificate for a website leads back to an expected root Certificate
+Authority. This feature was not analyzed, because no one I know uses
+Internet Explorer, and Chrome and Firefox already implement this or can
+do something similar through plugins (ex. \url{http://convergence.io/}). This
+provides the most benefit for those using localized browsers (Yandex,
+Tencent, etc.) or Opera. More information about this feature is
+available from Microsoft here\cite{certificate_pinning}.
+
+I do know this works using the DLL \texttt{EMET\_CE.dll} and
+\texttt{EMET\_CE64.dll}, and this DLL exports the single function
+\texttt{extCVCCP} which is referring to the Windows function
+\texttt{CertVerifyCertificateChainPolicy}. Then, according to Neil
+Sikka, who is a developer for EMET and presented a talk titled ``EMET
+4.0 PKI Mitigation'' at Defcon 21 (2013)\cite{defcon_emet_pki}, the certificate is
+then passed to EMET\_Agent.exe which determines whether or not to trust
+the cert.
+
+Due to how this works, only applications which use the certificate checks of Windows will benefit from this.  Chrome can thus be protected with this, but Firefox can not.
+
+The default profile protects the following domains:
+
+\begin{itemize}
+  \item login.live.com (4 CAs)
+  \item login.microsoftonline.com (4 CAs)
+  \item login.skype.om (4 CAs)
+  \item login.yahoo.com (7 CAs)
+  \item secure.skype.com (4 CAs)
+  \item twitter.com (17 CAs)
+  \item www.facebook.com (16 CAs).
+\end{itemize}
+
+Note that although many CAs are listed (which looks bad), many of these
+are just different certificates owned by the same CA company (which is
+ok).
+
+
+\subsubsection{What it protects against}
+
+This protects against the attacks resulting from CA compromises such as
+the
+\fhref{http://www.securelist.com/en/blog/208194063/TURKTRUST_CA_Problems}{Turktrust
+incident}\cite{turktrust}. These are largely threats from nation states.
+
+\subsubsection{Weaknesses}
+
+\begin{itemize}
+  \item Only protects Internet Explorer, or via a complex manual step, can protect Chrome or alternative browsers, but not Firefox.
+  \item Only protects a limited number of sites without manual user configuration (ex. gmail is not protected).
+  \item Does not block processes from trusting the certificates.  EMET only shows a tooltip when it's checks fail.
+\end{itemize}
+
+\subsubsection{Impact}
+Conceptually, certificate pinning is a good idea, but better ideas
+exist, such as \url{http://convergence.io/}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Mitigations Applied to all EMET Protected Processes}\label{mitigations-applied-to-all-emet-protected-processes}
+
+\subsection{Deep Hooks}\label{deep-hooks}
+EMET hooks various functions that it views as ``Critical''.  The full list can be found in the \hyperref[critical_functions]{Appendix}.
+
+The concept behind this is explained in Ivan Fratric's ROPGuard paper\cite{ropguard_pdf}.  Function hooking first happened with EMET in version 3.5, when it incorporated the concepts from ROPGuard.
+
+\subsubsection{Weaknesses}
+
+The limitations with hooking are well-known, specifically in 2004 Jamie Butler and two other anonymous authors described their weaknesses in Phrack in their article ``Bypassing 3rd Party Windows Buffer Overflow Protection''\cite{bypass_overflow_protection}.  
+
+The general weakness is simply to jump into code past the point where the hooks are.  In the case of deep hooking, if you are hooking the function \texttt{VirtualProtect} in \texttt{kernel32.dll}, you should also hook \texttt{VirtualProtect} in \texttt{kernelbase.dll} and also the function \texttt{VirtualProtectEx}.  Shahriyar Jalayeri quickly bypassed the \texttt{VirtualProtect} hook in EMET 3.5 by calling directly into \texttt{kernelbase.dll}\cite{emet35_rop_bypass}.  EMET 4.0, with it's deep hooking, now does a better job of hooking the deeper functions.
+
+A weakness specific to deep hooking would be to trick EMET into thinking that the executing code has already been checked.  What I mean is that for performance reasons, if you call  \texttt{kernel32:VirtualProtect}, EMET will check this call, but should set a flag to avoid checking things again when it enters \texttt{kernelbase.dll}.  If this flag can be found and set, you may be able to bypass these deep hook checks.
+
+
+\subsubsection{Impact}
+My valuation of the impact on this mitigation is purely based on whether deep hooking should be done versus not hooking the deeper functions.  In that regard, deep hooking is important, and EMET does this in a performant way.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Anti Detours}\label{anti-detours}
+Critical function are protected by EMET by using a \texttt{jmp} hook at the start function.  Microsoft even has a library called \fhref{http://research.microsoft.com/en-us/projects/detours/}{Detours} for providing this sort of hooking, which is why this protection is called ``Anti Detours''.  The \texttt{jmp} points to code that performs checks on how the function is being called and what called it.  The bypass for this is instead of making a \texttt{call} to the start of the function, you \texttt{jmp} to the location after the hook.  This is shown in figures \ref*{fig:unprotected}, \ref*{fig:hooked}, and \ref*{fig:antidetour}.  
+
+In Figure \ref*{fig:hooked}, where a detour hook has been performed, the attacker should jump to the address \texttt{76bab50f} to avoid the hook.  By applying Anti Detours in Figure \ref*{fig:antidetour}, EMET has inserted \text{int 3} instructions which will cause exceptions if code tries to jump to those offsets.
+
+
+\begin{minipage}[t]{\textwidth}
+\centering
+\begin{minted}{text}
+0:001> u KERNEL32!LoadLibraryA
+KERNEL32!LoadLibraryA:
+76bab50a 8bff            mov     edi,edi
+76bab50c 55              push    ebp
+76bab50d 8bec            mov     ebp,esp
+76bab50f 837d0800        cmp     dword ptr [ebp+8],0
+76bab513 53              push    ebx
+76bab514 56              push    esi
+\end{minted}
+  \captionof{figure}{Unprotected critical function}
+  \label{fig:unprotected}
+\end{minipage}
+
+\begin{minipage}[t]{\textwidth}
+\centering
+\begin{minted}{text}
+0:003> u KERNEL32!LoadLibraryA
+KERNEL32!LoadLibraryA:
+76bab50a e9f151a1c0      jmp     375c0700
+76bab50f 837d0800        cmp     dword ptr [ebp+8],0
+76bab513 53              push    ebx
+76bab514 56              push    esi
+\end{minted}
+  \captionof{figure}{EMET hooked critical function}
+  \label{fig:hooked}
+\end{minipage}
+
+\begin{minipage}[t]{\textwidth}
+\centering
+\begin{minted}{text}
+0:003> u KERNEL32!LoadLibraryA
+KERNEL32!LoadLibraryA:
+76bab50a e9f151a1c0      jmp     375c0700
+76bab50f cc              int     3
+76bab510 cc              int     3
+76bab511 cc              int     3
+76bab512 cc              int     3
+76bab513 53              push    ebx
+76bab514 56              push    esi
+\end{minted}
+\captionof{figure}{Anti-Detours protected critical function}
+\label{fig:antidetour}
+\end{minipage}%
+
+\subsubsection{Weaknesses}
+The obvious weakness of this solution is to simply jump further into the function.  So now instead of setting your \texttt{jmp} for \texttt{76bab50f}, you set it for 4 bytes further to \texttt{76bab513}, or even further than that.
+
+\subsubsection{Impact}
+Easily bypassed once you know what it does.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+\subsection{Banned Functions}\label{banned-functions}
+The only currently banned function is \texttt{LdrHotPatchRoutine}.  The issue with this was discussed by Yang Yu at CanSecWest 2013\cite{LdrHotPatchRoutine}.
+
+\subsubsection{Impact}
+The function that was banned isn't exactly bad, but the problem was there was a fixed memory address for finding it.  The was fixed in \fhref{http://blogs.technet.com/b/srd/archive/2013/08/12/mitigating-the-ldrhotpatchroutine-dep-aslr-bypass-with-ms13-063.aspx}{MS13-063}\cite{ms13_063}. Because this has been patched, there isn't much use of it being banned by EMET anymore.
+
+
+
+
+
+
+
+
+
+\section{Per Process Mitigations}\label{per-process-mitigations}
+
+\subsection{DEP}\label{dep}
+Calls \texttt{SetProcessDepPolicy()}.
+% See 000544DD in EMET.dll
+
+\subsubsection{Impact}
+
+Assuming you've already set the system wide DEP policy to always on, this has no benefit.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{SEHOP}\label{sehop}
+See the discussion on \hyperref[system_sehop]{system-wide SEHOP} for an explanation of SEHOP.
+
+The per-process SEHOP is set-up by calling \texttt{AddVectoredExceptionHandler()} to add a process wide exception handler, as opposed to the local per-thread exception handlers that occur with try/catch statements.  As Microsoft explains, ``When an exception occurs in Windows XP, the vectored exception handler list is processed before the normal SEH list''  \cite{seh_explanation}.  So EMET's exception handler gets called, and then can scan through the SEH list to ensure it hasn't been broken.
+
+
+\subsubsection{Impact}
+Assuming you've already set the system wide SEHOP policy to always on, this has no benefit.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+\subsection{NullPage}\label{nullpage}
+% See 00053FEC in EMET.dll
+
+This works by simply allocating a guard page at the address \texttt{0x00000000} by running the following code:
+
+\begin{minted}{c++}
+PVOID *BaseAddress = 1; // The address can not be NULL (0),
+                        // else NtAllocateVirtualMemory allocs a random page
+PULONG RegionSize = 0x1000;
+NtAllocateVirtualMemory(GetCurrentProcess(),
+    &BaseAddress, 0, &RegionSize, MEM_RESERVE, PAGE_NOACCESS);
+\end{minted}
+
+You can see the result of this by attaching to a protected process in windbg and running \texttt{!address 0} and seeing it protected with \texttt{PAGE\_NOACCESS}.
+
+The are no known attacks that this protects against.  Null page exploits are all privilege escalations. For example j00ru has found some\cite{null_priv1, null_priv2}.  If the shellcode or payload has enough control in the system that it can make an attempt to escalate it's privileges, it should be able to just create a new process that does not have EMET protecting it, and escalate privileges in that process.
+
+
+\subsubsection{What it protects against}
+No known attacks.
+
+\subsubsection{Impact}
+There are no known attacks for this, so there is no point other than a very pro-active defense-in-depth mindset and there is no system impact by doing this.  Windows 8 does perform this protection by default without the use of EMET.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{HeapSpray}\label{heapspray}
+% See 0005445C
+
+This works the same as the Null Page protection but allocs memory at the
+addresses:
+
+\begin{itemize}
+  \item \texttt{0x0a040a04}
+  \item \texttt{0x0a0a0a0a}
+  \item \texttt{0x0b0b0b0b}
+  \item \texttt{0x0c0c0c0c}
+  \item \texttt{0x0d0d0d0d}
+  \item \texttt{0x0e0e0e0e}
+  \item \texttt{0x04040404}
+  \item \texttt{0x05050505}
+  \item \texttt{0x06060606}
+  \item \texttt{0x07070707}
+  \item \texttt{0x08080808}
+  \item \texttt{0x09090909}
+  \item \texttt{0x20202020}
+  \item \texttt{0x14141414}
+\end{itemize}
+
+
+\subsubsection{Impact}
+This is effective at preventing many drive-by attacks that use heap sprays, but it can be easily bypassed by simply choosing different addresses to direct the instruction pointer to.
+
+\sectionbreakline{}
+
+
+
+
+
+
+\subsection{EAF}\label{eaf}
+Export Address Table Filtering (EAF) is accomplished by setting hardware breakpoints using the debug registers (\texttt{DR0} and \texttt{DR1}) on the export tables for \texttt{ntdll.dll} and \texttt{kernel32.dll}.  First the code finds the export table addresses in memory by parsing the PE headers of the images.  Then a new thread is spawned that calls a function every 100ms.  This function will set the debug registers for every thread so exceptions will be thrown whenever something tries to read the export tables.  This loop every 100ms is how new threads become protected.
+
+To see the effect of this, attach windbg to a process, and do the following:
+
+%\begingroup
+%\fontsize{8pt}{10pt}\selectfont
+\begin{minted}{text}
+0:000> *********************************************************************************
+0:000> * Change thread context to something other than the one you broke in on
+0:000> !threads
+Index  TID  TEB         StackBase   StackLimit  DeAlloc     StackSize   ThreadProc
+0  000014f4 0x7ffdd000  0x00190000  0x00184000  0x00090000  0x0000c000  0x44f125: PUTTY
+1  00001838 0x7ffda000  0x00650000  0x0064f000  0x00550000  0x00001000  0x6e4bd204: EMET
+2  00001810 0x7ffd7000  0x01e70000  0x01e6a000  0x01d70000  0x00006000  0x6e4b4527: EMET
+3  000019a8 0x7feaf000  0x02630000  0x0262c000  0x02530000  0x00004000  0x7797fdc4: ntdll!DbgUiRemoteBreakin
+Total VM consumed by thread stacks 0x00017000
+0:000> ~0s
+0:000> *********************************************************************************
+0:000> * Show where the dr0 register is pointing
+0:000> r dr0
+dr0=76a1854c
+0:000> !address 76a1854c
+
+Usage:                  Image
+Base Address:           769b0000
+...
+Image Path:             C:\Windows\SYSTEM32\KERNEL32.DLL
+...
+More info:              !dh 0x76930000
+0:000> *********************************************************************************
+0:000> * Check out the file header for KERNEL32.dll
+0:000> !dh -f 0x76930000
+...
+   E8530 [    CBD0] address [size] of Export Directory
+...
+0:000> ?0x76930000+0xE8530
+Evaluate expression: 1990296880 = 76a18530
+\end{minted}
+
+So the \texttt{IMAGE\_EXPORT\_DIRECTORY} structure starts at \texttt{0x76a18530}
+and at \texttt{0x76a1854c} (where \texttt{dr0} points) is the RVA from the image base to the \texttt{AddressOfFunctions}.  So when you find the address offset in your shellcode and go to add that to the \texttt{AddressOfFunctions} you'll cause an exception when \texttt{AddressOfFunctions} gets read in for the addition.
+
+Windbg shows the value of \texttt{DR7} as 0 to me, which is incorrect.  \texttt{DR7} controls whether the breakpoints are enabled and the size of the data to protect.  From the code, this value should be \texttt{0x00f00004 | 0x000f0001 = 0x00ff0005}.  This means \texttt{DR0} and \texttt{DR1} are enabled, and 4 bytes are protected from reads and writes at these addresses.
+
+The exception handler for this will check if the code that touched this value is coming from a loaded module or not.  If it is not, then EMET identifies this as an attack attempt.
+
+Conceptually, this protection does the same thing as Piotr Bania's Protty project discussed in Phrack 0x0b\cite{protty} under the section heading ``FEATURE: EXPORT SECTION PROTECTION''.  However, the implementation is very different.  Piotr admits his implementation has performance issues, but it is a more thorough protection, and doesn't use up the limited quantity of debug registers.
+
+\subsubsection{Weaknesses}
+Back when EMET 2.0 came out, Skywing showed how to defeat EAF in his post\cite{eaf_bypass} and accompanying shellcode\cite{eaf_bypass_shellcode}.
+
+Aaron Portnoy explained he grabs the function pointers by reading the .idata import section from other modules\cite{bypass_all_the_things}.
+
+The cleanest bypass is by Piotr Bania who simply disables the exceptions from occurring anymore\cite{bania_eaf}.
+
+In addition to these bypasses, it may be the case that the process is not protected anyway by EAF.  The User Guide states the following:
+\begin{itemize}
+\item ``Some virtual machines do not support debug registers (and consequently EAF).''
+\item ``EAF mitigation should not be applied to: programs and libraries protected that use packers or compressors, DRM or software with anti-debugging code, debuggers, and security software such as antivirus, sandbox, firewalls, etc.''
+\item The protection profile provided by EMET disables EAF for Windows Media Player, Skype, and 7-zip.
+\end{itemize}
+
+\subsubsection{Impact}
+This can be easily bypassed.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+\subsection{MandatoryASLR}\label{mandatoryaslr}
+See the discussion on \hyperref[system_aslr]{system-wide ASLR}.
+
+I was unable to find where this is accomplished in the binary.  According to the User Guide\cite{userguide}, it states ``EMET's mitigations only become active after the address space for the core process and the static dependencies has been set up. Mandatory ASLR does not force address space randomization on any dependencies has been set up. Mandatory ASLR does not force address space randomization on any.''  The Recon presentation\cite{inside_emet} on EMET states ``EMET intercepts calls to \texttt{ntdll!NtMapViewOfSection()}'' which is called by \texttt{LoadLibrary()}.  So the base executable and any DLL's it depends on will not be affected by Mandatory ASLR, but if the application loads a plugin at run-time using \texttt{LoadLibrary()}, then EMET can identify if this DLL can be relocated, and if so it will allocate memory at that address, which will force the OS to load the binary somewhere besides the default location.
+
+\subsubsection{Impact}
+This will only randomize the base address for DLL's that are loaded through something like \texttt{LoadLibrary()} and only to those DLL's that have relocation data.  Therefore, this will have little impact for most executables.
+
+\sectionbreakline{}
+
+
+
+
+
+
+
+
+
+\subsection{BottomUpASLR}\label{bottomupaslr}
+% See 
+This randomizes the heap by making a random number of allocations when the process starts up.
+
+\begin{minted}{c++}
+ULONG numAllocs = RtlRandom(GetCurrentProcessId() ^ GetTickCount()) & 0xff;
+for (; numAllocs > 0; numAllocs--) {
+    PVOID *BaseAddress = 0;
+    PULONG RegionSize = 0x10000;
+    NtAllocateVirtualMemory(GetCurrentProcess(),
+        &BaseAddress, 0, &RegionSize, MEM_RESERVE, PAGE_NOACCESS);
+}
+\end{minted}
+
+\subsubsection{Impact}
+This is effective for adding some randomization to the heap to old OS's, but has no impact for newer operating systems.
+
+\sectionbreakline{}
+
+
+
+\subsection{ROP Protections}
+I did not investigate the ROPGuard additions as these are largely copied from the open-source ROPGuard project\cite{ropguard_source}.  One important limitation of all these is that none of them work on 64-bit processes.
+
+\paragraph{LoadLib}\label{loadlib}
+The concept for this protection is to deny \texttt{LoadLibrary()} and it's brethren from loading libraries over UNC paths.
+
+Aaron Portnoy showed\cite{bypass_all_the_things} how to bypass this by using \texttt{MoveFileA()} to copy the remote executable, using a UNC path, then executed it locally.  Hooking more functions could help with this, but ultimately this will likely always be a ``nuisance'' protection for attackers to bypass.
+
+
+\paragraph{MemProt}\label{memprot}
+This denies calls to memory protection APIs (ex. \texttt{VirtualProtectEx()}) to avoid marking memory as executable when the target address belongs to the thread's stack.  I do not believe it protects calls to \texttt{SetProcessDEPPolicy()}. 
+
+
+\paragraph{Caller}\label{caller}
+Ensures the \hyperref[critical_functions]{Critical Functions} are called from \texttt{Call} instructions and not \texttt{jmp}or \texttt{ret}.  Uses the Microsoft's internal \fhref{http://www.rsdn.ru/forum/winapi/451589.hot}{MSDIS}\cite{msdis} library for disassembling backwards from the return address, with many special cases\cite{inside_emet}.
+
+\paragraph{SimExecFlow}\label{simexecflow}
+Uses the MSDIS disassembler library to execute simulation at the return address when \hyperref[critical_functions]{Critical Functions} are called.  Execution is simulated for 15 instructions to ensure the execution does not \texttt{ret} into another Critical Function\cite{inside_emet}.
+
+\paragraph{StackPivot}\label{stackpivot}
+Ensures ``ESP register point to attacker call stack''\cite{defcon_emet_pki}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Conclusion}
+EMET is a great tool that I highly recommend for protecting Windows systems.  Some of the protections are very important and this is an easy and free way to enforce those.  Some of the protections can be easily bypassed and are thus only useful at blocking basic exploitation attempts.  However, a failed exploitation attempt is an opportunity for detection, and EMET does a good job of ensuring these failures are logged.  For a casual user, logging exploit failures may have little impact, but these could be very useful in a corporate environment with a security team to investigate and correlate these incidents.  
+
+EMET successfully accomplishes it's goals of raising the cost for the attacker, while having little performance impact, and largely being universal protections that do not require code changes.
+
+
+\section{Suggestions for Improvements}\label{suggestions-for-improvements}
+\begin{itemize}
+  \item Make it easier to automatically protect any new, unprotected processes.
+  \item Identify when protections will not be effective, such as when an image without relocations is loaded.
+  \item Port the ROP protections to 64-bit.
+  \item Although EMET is largely focused on back-porting security techniques to older OS's and ensuring a similar security posture across all OS's, on Windows 8 systems, please provide access to the new security protections there as documented in the presentation ``Windows 8 Security and ARM'' by Alex Ionescu\cite{windows_ionescu}.
+\end{itemize}
+
+
+
+
+
+
+\section{Greetz}\label{greetz}
+Thank you to the following:
+\begin{itemize}
+\item
+  The EMET team for developing the tool.
+\item
+  Matt Miller (Skape) for implementing the example of ASLR and SEHOP in WehnTrust and making it open-source, and inventing SEHOP.
+\item
+  Ivan Fratric for ROPGuard and making it open-source. Also his great posts at \url{http://ifsec.blogspot.com/}
+\item
+  Piotr Bania for his advances in exploit protections, and sort of making them open-source, if you count hand-coded assembly as open-source.
+\end{itemize}
+
+
+
+
+
+\section{Appendix}\label{appendix}
+
+\subsection{MitigationOptions registry value}\label{MitigationOptions}
+
+This section describes the registry value:\\
+\texttt{HKLM\textbackslash{}SYSTEM\textbackslash{}CurrentControlSet\textbackslash{}Control\textbackslash{}Session Manager\textbackslash{}Kernel\textbackslash{}MitigationOptions}
+
+I believe this is undocumented, so let's try to document it. Luckily
+MitigationInterface.dll, which is responsible for setting that value, is
+a .NET application which decompiles nicely, and the
+function of interest is \texttt{SetMitigationState}. This value only
+exists on Windows 8 and up. This value is broken up into 4-bit sections
+with the sections representing:
+
+\begin{minted}{text}
+DEP             = MitigationOptions & 0x0000000f >> 0;
+SEHOP           = MitigationOptions & 0x000000f0 >> 4;
+MANDATORYASLR   = MitigationOptions & 0x00000f00 >> 8;
+HEAP_TERMINATE  = MitigationOptions & 0x0000f000 >> 12;
+BOTTOMUPASLR    = MitigationOptions & 0x000f0000 >> 16;
+HA_ASLR         = MitigationOptions & 0x00f00000 >> 20;
+\end{minted}
+
+For each mitigation, the possible values are:
+
+\begin{minted}{text}
+off      = 6; // 0b110                      0b100 = PS_POLICY_BIT_ON
+optIn    = 2; // 0b010                      0b001 = PS_MITSTATE_DISABLE
+optOut   = 1; // 0b001                      0b010 = ~PS_MITSTATE_DISABLE
+alwaysOn = 5; // 0b101
+\end{minted}
+
+\subsection{Critical Functions}\label{critical_functions}
+The following functions are considered ``critical functions'' and are hooked by EMET.
+
+\begin{minted}{text}
+kernel32.MapViewOfFileFromApp
+ntdll.NtMapViewOfSection
+kernelbase.MapViewOfFileEx
+kernelbase.MapViewOfFile
+kernel32.MapViewOfFileEx
+kernel32.MapViewOfFile
+ntdll.NtCreateSection
+kernelbase.CreateFileMappingW
+kernelbase.CreateFileMappingNumaW
+kernel32.CreateFileMappingW
+kernel32.CreateFileMappingA
+ntdll.NtCreateFile
+kernelbase.CreateFileW
+kernel32.CreateFileW
+kernel32.CreateFileA
+kernel32.WinExec
+ntdll.NtWriteVirtualMemory
+kernelbase.WriteProcessMemory
+kernel32.WriteProcessMemory
+ntdll.NtCreateThreadEx
+kernelbase.CreateRemoteThreadEx
+kernel32.CreateRemoteThreadEx
+kernel32.CreateRemoteThread
+ntdll.NtCreateProcess
+ntdll.NtCreateUserProcess
+kernel32.CreateProcessInternalW
+kernel32.CreateProcessInternalA
+kernel32.CreateProcessW
+kernel32.CreateProcessA
+ntdll.RtlCreateHeap
+kernelbase.HeapCreate
+kernel32.HeapCreate
+ntdll.NtAllocateVirtualMemory
+kernelbase.VirtualAllocEx
+kernelbase.VirtualAlloc
+kernel32.VirtualAllocEx
+kernel32.VirtualAlloc
+ntdll.LdrLoadDll
+kernelbase.LoadLibraryExW
+kernelbase.LoadLibraryExA
+kernel32.LoadPackagedLibrary
+kernel32.LoadLibraryExW
+kernel32.LoadLibraryExA
+kernel32.LoadLibraryW
+kernel32.LoadLibraryA
+ntdll.NtProtectVirtualMemory
+kernelbase.VirtualProtectEx
+kernelbase.VirtualProtect
+kernel32.VirtualProtectEx
+kernel32.VirtualProtect
+ntdll.LdrHotPatchRoutine
+\end{minted}
+
+ \clearpage
+\bibliography{emet}
+
+\end{document}
